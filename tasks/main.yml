@@ -1,0 +1,6 @@
+---
+- name: ensure ansible is at the latest version
+  apt: pkg=ansible state=latest
+  tags:
+    - ansible
+    - packages
