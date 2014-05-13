@@ -4,3 +4,43 @@
   tags:
     - ansible
     - packages
+
+# Installation of supporting packages used by ansible on an instance.
+- name: install support software packages
+  apt:
+    pkg={{ item }}
+    state=installed
+    update-cache=yes
+  sudo: yes
+  with_items:
+    - python-pip
+  tags:
+    - ansible
+    - packages
+
+- name: install support python packages
+  pip: name={{ item }}
+  with_items:
+    - python-keyczar
+    - boto
+  tags:
+    - ansible
+    - packages
+
+- name: create /opt/etc/ansible directory
+  file:
+    path=/opt/etc/ansible
+    state=directory
+    mode=755
+
+- name: create ec2.py file
+  get_url:
+    dest=/opt/etc/ansible
+    url="https://raw.githubusercontent.com/ansible/ansible/devel/plugins/inventory/ec2.py"
+    mode=755
+
+- name: create ec2.ini file
+  file:
+    src=ec2.ini
+    dest=/opt/etc/ansible
+    mode=644
