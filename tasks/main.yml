@@ -32,15 +32,24 @@
     path=/opt/etc/ansible
     state=directory
     mode=755
+  tags:
+    - ansible
+    - configuration
 
 - name: create ec2.py file
   get_url:
     dest=/opt/etc/ansible
     url="https://raw.githubusercontent.com/ansible/ansible/devel/plugins/inventory/ec2.py"
     mode=755
+  tags:
+    - ansible
+    - configuration
 
 - name: create ec2.ini file
-  file:
+  copy:
     src=ec2.ini
     dest=/opt/etc/ansible/ec2.ini
     mode=644
+  tags:
+    - ansible
+    - configuration
