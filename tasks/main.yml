@@ -1,4 +1,11 @@
 ---
+# Install main package
+- name: add ansible repo
+  apt_repository: repo='ppa:rquillo/ansible'
+  tags:
+    - ansible
+    - packages
+
 - name: ensure ansible is at the latest version
   apt: pkg=ansible state=latest
   tags:
@@ -10,7 +17,6 @@
   apt:
     pkg={{ item }}
     state=installed
-    update-cache=yes
   sudo: yes
   with_items:
     - python-pip
