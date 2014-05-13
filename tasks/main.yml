@@ -42,5 +42,5 @@
 - name: create ec2.ini file
   file:
     src=ec2.ini
-    dest=/opt/etc/ansible
+    dest=/opt/etc/ansible/ec2.ini
     mode=644
