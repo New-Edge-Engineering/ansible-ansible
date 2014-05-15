@@ -1,4 +1,4 @@
-# Ansible Time Role #
+# Ansible Ansible Role #
 
 Ansible role to make sure ansible is installed. Feedback, bug-reports, requests,
 is welcomed and can be done via
