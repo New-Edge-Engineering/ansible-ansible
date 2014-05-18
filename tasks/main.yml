@@ -1,17 +1,4 @@
 ---
-# Install main package
-- name: add ansible repo
-  apt_repository: repo='ppa:rquillo/ansible'
-  tags:
-    - ansible
-    - packages
-
-- name: ensure ansible is at the latest version
-  apt: pkg=ansible state=latest
-  tags:
-    - ansible
-    - packages
-
 # Installation of supporting packages used by ansible on an instance.
 - name: install support software packages
   apt:
@@ -19,7 +6,24 @@
     state=installed
   sudo: yes
   with_items:
+    - build-essential
+    - python-dev
     - python-pip
+  tags:
+    - ansible
+    - packages
+
+# Install setup tools to be able to install ansible via pip
+- name: retrieve ez_setup.py
+  get_url:
+    dest=/tmp/ez_setup.py
+    url="https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py"
+  tags:
+    - ansible
+    - packages
+
+- name: execute ez_setup.py
+  shell: python /tmp/ez_setup.py
   tags:
     - ansible
     - packages
@@ -27,6 +31,7 @@
 - name: install support python packages
   pip: name={{ item }}
   with_items:
+    - ansible
     - python-keyczar
     - boto
   tags:
