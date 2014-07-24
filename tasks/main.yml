@@ -9,29 +9,24 @@
     - build-essential
     - python-dev
     - python-pip
+    - python-software-properties
   tags:
     - ansible
     - packages
 
-# Install setup tools to be able to install ansible via pip
-- name: retrieve ez_setup.py
-  get_url:
-    dest=/tmp/ez_setup.py
-    url="https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py"
-  tags:
-    - ansible
-    - packages
+- name: Ensure ansible apt repository is installed
+  apt_repository:
+    repo='ppa:ansible/ansible'
+    update_cache=yes
 
-- name: execute ez_setup.py
-  shell: python /tmp/ez_setup.py
-  tags:
-    - ansible
-    - packages
+- name: Ensure ansible is installed
+  apt:
+    pkg=ansible
+    state=installed
 
 - name: install support python packages
   pip: name={{ item }}
   with_items:
-    - ansible
     - python-keyczar
     - boto
   tags:
@@ -45,7 +40,7 @@
     mode=755
   tags:
     - ansible
-    - configuration
+    - inventory
 
 - name: create ec2.py file
   get_url:
@@ -54,7 +49,7 @@
     mode=755
   tags:
     - ansible
-    - configuration
+    - inventory
 
 - name: create ec2.ini file
   copy:
@@ -63,4 +58,11 @@
     mode=644
   tags:
     - ansible
-    - configuration
+    - inventory
+
+- name: Update temporay directory location
+  lineinfile:
+    dest=/etc/ansible/ansible.cfg
+    regexp=^remote_tmp
+    line="remote_tmp     = {{ ansible_remote_tmp }}"
+  when: ansible_remote_tmp is defined and ansible_remote_tmp|length > 0
