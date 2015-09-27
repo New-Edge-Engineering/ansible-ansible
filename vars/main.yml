@@ -1,0 +1,2 @@
+---
+ansible_ec2_py_url: "https://raw.githubusercontent.com/ansible/ansible/stable-1.9/plugins/inventory/ec2.py"

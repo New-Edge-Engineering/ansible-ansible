@@ -45,7 +45,7 @@
 - name: create ec2.py file
   get_url:
     dest=/opt/etc/ansible
-    url="https://raw.githubusercontent.com/ansible/ansible/devel/plugins/inventory/ec2.py"
+    url="{{ ansible_ec2_py_url }}"
     mode=755
   tags:
     - ansible
