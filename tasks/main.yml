@@ -2,9 +2,9 @@
 # Installation of supporting packages used by ansible on an instance.
 - name: install support software packages
   apt:
-    pkg={{ item }}
-    state=installed
-  sudo: yes
+    pkg: "{{ item }}"
+    state: installed
+  become: yes
   with_items:
     - build-essential
     - python-dev
@@ -16,16 +16,17 @@
 
 - name: Ensure ansible apt repository is installed
   apt_repository:
-    repo='ppa:ansible/ansible'
-    update_cache=yes
+    repo: "ppa:ansible/ansible"
+    update_cache: yes
 
 - name: Ensure ansible is installed
   apt:
-    pkg=ansible
-    state=installed
+    pkg: ansible
+    state: installed
 
 - name: install support python packages
-  pip: name={{ item }}
+  pip:
+    name: "{{ item }}"
   with_items:
     - python-keyczar
     - boto
@@ -35,34 +36,33 @@
 
 - name: create /opt/etc/ansible directory
   file:
-    path=/opt/etc/ansible
-    state=directory
-    mode=755
+    path: /opt/etc/ansible
+    state: directory
+    mode: 755
   tags:
     - ansible
     - inventory
 
 - name: create ec2.py file
   get_url:
-    dest=/opt/etc/ansible
-    url="{{ ansible_ec2_py_url }}"
-    mode=755
+    dest: /opt/etc/ansible
+    url: "{{ ansible_ec2_py_url }}"
+    mode: 755
   tags:
     - ansible
     - inventory
 
 - name: create ec2.ini file
   copy:
-    src=ec2.ini
-    dest=/opt/etc/ansible/ec2.ini
-    mode=644
+    src: ec2.ini
+    dest: /opt/etc/ansible/ec2.ini
+    mode: 644
   tags:
     - ansible
     - inventory
 
 - name: Update temporay directory location
   lineinfile:
-    dest=/etc/ansible/ansible.cfg
-    regexp=^remote_tmp
-    line="remote_tmp     = {{ ansible_remote_tmp }}"
-  when: ansible_remote_tmp is defined and ansible_remote_tmp|length > 0
+    dest: /etc/ansible/ansible.cfg
+    regexp: ^remote_tmp
+    line: "remote_tmp     = {{ ansible_remote_tmp|default('/tmp') }}"
