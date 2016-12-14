@@ -1,2 +1,2 @@
 ---
-ansible_remote_tmp: None
+ansible_remote_tmp: /tmp
