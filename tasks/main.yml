@@ -38,7 +38,7 @@
   file:
     path: /opt/etc/ansible
     state: directory
-    mode: 755
+    mode: 0755
   tags:
     - ansible
     - inventory
@@ -47,7 +47,7 @@
   get_url:
     dest: /opt/etc/ansible
     url: "{{ ansible_ec2_py_url }}"
-    mode: 755
+    mode: 0755
   tags:
     - ansible
     - inventory
@@ -56,10 +56,17 @@
   copy:
     src: ec2.ini
     dest: /opt/etc/ansible/ec2.ini
-    mode: 644
+    mode: 0644
   tags:
     - ansible
     - inventory
+
+- name: ensure password file exists if given
+  copy:
+    content: "{{ ansible_pass }}"
+    dest: "{{ ansible_pass_location }}"
+    mode: 0644
+  when: ansible_pass is defined
 
 - name: Update temporay directory location
   lineinfile:

@@ -1,2 +1,3 @@
 ---
 ansible_remote_tmp: /tmp
+ansible_pass_location: /opt/etc/ansible/.pass
