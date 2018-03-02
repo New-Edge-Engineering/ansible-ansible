@@ -1,28 +1,10 @@
 ---
 # Installation of supporting packages used by ansible on an instance.
-- name: install support software packages
-  apt:
-    pkg: "{{ item }}"
-    state: installed
-  become: yes
-  with_items:
-    - build-essential
-    - python-dev
-    - python-pip
-    - python-software-properties
-  tags:
-    - ansible
-    - packages
+- import_tasks: install_via_apt.yml
+  when: ansible_pkg_mgr == "apt"
 
-- name: Ensure ansible apt repository is installed
-  apt_repository:
-    repo: "ppa:ansible/ansible"
-    update_cache: yes
-
-- name: Ensure ansible is installed
-  apt:
-    pkg: ansible
-    state: installed
+- import_tasks: install_via_yum.yml
+  when: ansible_pkg_mgr == "yum"
 
 - name: install support python packages
   pip:

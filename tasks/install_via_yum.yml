@@ -1,0 +1,15 @@
+---
+- name: install yum | software packages
+  yum:
+    name: "{{ item }}"
+    state: installed
+  become: yes
+  with_items:
+    - "@Development tools"
+    - python-devel
+    - python-pip
+    - ansible
+  tags:
+    - ansible
+    - Installation
+    - yum
