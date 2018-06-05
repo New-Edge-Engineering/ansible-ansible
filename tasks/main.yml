@@ -9,9 +9,7 @@
 - name: install support python packages
   pip:
     name: "{{ item }}"
-  with_items:
-    - python-keyczar
-    - boto
+  with_items: "{{ ansible_supporting_pip_libraries }}"
   tags:
     - ansible
     - packages
@@ -38,16 +36,28 @@
   copy:
     src: ec2.ini
     dest: /opt/etc/ansible/ec2.ini
-    mode: 0644
+    mode: 0600
   tags:
     - ansible
     - inventory
+
+- name: ensure password directory exists if given
+  file:
+    dest: "{{ ansible_pass_location.split('/')[:-1]|join('/') }}"
+    group: "{{ ansible_pass_location_group }}"
+    mode: 0755
+    owner: "{{ ansible_pass_location_user }}"
+    recurse: yes
+    state: directory
+  when: ansible_pass is defined
 
 - name: ensure password file exists if given
   copy:
     content: "{{ ansible_pass }}"
     dest: "{{ ansible_pass_location }}"
+    group: "{{ ansible_pass_location_group }}"
     mode: 0644
+    owner: "{{ ansible_pass_location_user }}"
   when: ansible_pass is defined
 
 - name: Update temporay directory location

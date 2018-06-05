@@ -1,3 +1,12 @@
 ---
 ansible_remote_tmp: /tmp
-ansible_pass_location: /opt/etc/ansible/.pass
+# ansible_pass:
+ansible_pass_location: "~/.ansible/vault-password"
+ansible_pass_location_user: "{{ ansible_user_id }}"
+ansible_pass_location_group: "{{ ansible_user_id }}"
+ansible_supporting_pip_libraries:
+  - boto
+  - ipaddr
+  - netaddr
+  - passlib
+  - python-keyczar
